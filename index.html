@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caçula Veículos - Sistema de Gerenciamento</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Gerenciamento - Caçula Veículos</h1>
+
+        <!-- Adicionar Veículo -->
+        <form id="vehicleForm">
+            <h2>Adicionar Veículo</h2>
+            <div>
+                <label for="vehicle">Veículo:</label>
+                <input type="text" id="vehicle" required>
+            </div>
+            <div>
+                <label for="purchasePrice">Preço de Compra:</label>
+                <input type="number" id="purchasePrice" required>
+            </div>
+            <div>
+                <label for="salePrice">Preço de Venda:</label>
+                <input type="number" id="salePrice" required>
+            </div>
+            <button type="submit">Adicionar Veículo</button>
+        </form>
+
+        <!-- Adicionar Despesas Operacionais -->
+        <form id="expenseForm">
+            <h2>Adicionar Despesas Operacionais</h2>
+            <div>
+                <label for="expenseType">Tipo de Despesa:</label>
+                <select id="expenseType">
+                    <option value="Aluguel">Aluguel</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Salários">Salários</option>
+                    <option value="Outros">Outros</option>
+                </select>
+            </div>
+            <div>
+                <label for="expenseAmount">Valor da Despesa:</label>
+                <input type="number" id="expenseAmount" required>
+            </div>
+            <button type="submit">Adicionar Despesa</button>
+        </form>
+
+        <!-- Filtro de Veículos -->
+        <div>
+            <h2>Buscar Veículo</h2>
+            <input type="text" id="searchBar" placeholder="Digite o nome do veículo">
+        </div>
+
+        <!-- Tabela de Veículos -->
+        <h2>Estoque de Veículos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Veículo</th>
+                    <th>Preço de Compra</th>
+                    <th>Preço de Venda</th>
+                    <th>Lucro</th>
+                </tr>
+            </thead>
+            <tbody id="vehicleTableBody"></tbody>
+        </table>
+
+        <h3>Total de Lucro: <span id="totalProfit">0</span></h3>
+        <h3>Total de Despesas: <span id="totalExpenses">0</span></h3>
+
+        <!-- Relatórios -->
+        <h2>Gerar Relatórios</h2>
+        <button onclick="generateReport('monthly')">Relatório Mensal</button>
+        <button onclick="generateReport('quarterly')">Relatório Trimestral</button>
+        <div id="reportSection"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
