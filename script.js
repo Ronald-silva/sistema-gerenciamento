@@ -63,16 +63,34 @@ function renderTable() {
     document.getElementById('totalExpenses').innerText = `R$ ${totalExpenses.toFixed(2)}`;
 }
 
-// Função para gerar relatórios
+// Função para gerar relatórios detalhados
 function generateReport(type) {
     const reportSection = document.getElementById('reportSection');
     let report = '';
 
     if (type === 'monthly') {
-        report = `<p>Relatório Mensal: <br> Lucro: R$ ${totalProfit.toFixed(2)}, Despesas: R$ ${totalExpenses.toFixed(2)}</p>`;
+        report += `<h3>Relatório Mensal</h3>`;
     } else if (type === 'quarterly') {
-        report = `<p>Relatório Trimestral: <br> Lucro: R$ ${totalProfit.toFixed(2)}, Despesas: R$ ${totalExpenses.toFixed(2)}</p>`;
+        report += `<h3>Relatório Trimestral</h3>`;
     }
+
+    // Relatório de Veículos
+    report += `<h4>Relatório de Veículos</h4><table><tr><th>Veículo</th><th>Compra</th><th>Venda</th><th>Lucro</th><th>Data</th></tr>`;
+    vehicles.forEach((v) => {
+        report += `<tr><td>${v.vehicle}</td><td>R$ ${v.purchasePrice.toFixed(2)}</td><td>R$ ${v.salePrice.toFixed(2)}</td><td>R$ ${v.profit.toFixed(2)}</td><td>${v.transactionDate}</td></tr>`;
+    });
+    report += `</table>`;
+
+    // Relatório de Despesas
+    report += `<h4>Relatório de Despesas</h4><table><tr><th>Tipo</th><th>Valor</th><th>Data</th></tr>`;
+    expenses.forEach((e) => {
+        report += `<tr><td>${e.expenseType}</td><td>R$ ${e.expenseAmount.toFixed(2)}</td><td>${e.expenseDate}</td></tr>`;
+    });
+    report += `</table>`;
+
+    // Totalizadores
+    report += `<h4>Total de Lucro: R$ ${totalProfit.toFixed(2)}</h4>`;
+    report += `<h4>Total de Despesas: R$ ${totalExpenses.toFixed(2)}</h4>`;
 
     reportSection.innerHTML = report;
 }
