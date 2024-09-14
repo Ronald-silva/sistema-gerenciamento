@@ -10,9 +10,10 @@ document.getElementById('vehicleForm').addEventListener('submit', function(event
     const vehicle = document.getElementById('vehicle').value;
     const purchasePrice = parseFloat(document.getElementById('purchasePrice').value);
     const salePrice = parseFloat(document.getElementById('salePrice').value);
+    const transactionDate = document.getElementById('transactionDate').value;
     const profit = salePrice - purchasePrice;
 
-    const newVehicle = { vehicle, purchasePrice, salePrice, profit };
+    const newVehicle = { vehicle, purchasePrice, salePrice, profit, transactionDate };
     vehicles.push(newVehicle);
     localStorage.setItem('vehicles', JSON.stringify(vehicles));
 
@@ -29,8 +30,9 @@ document.getElementById('expenseForm').addEventListener('submit', function(event
 
     const expenseType = document.getElementById('expenseType').value;
     const expenseAmount = parseFloat(document.getElementById('expenseAmount').value);
+    const expenseDate = document.getElementById('expenseDate').value;
 
-    const newExpense = { expenseType, expenseAmount };
+    const newExpense = { expenseType, expenseAmount, expenseDate };
     expenses.push(newExpense);
     localStorage.setItem('expenses', JSON.stringify(expenses));
 
@@ -52,6 +54,7 @@ function renderTable() {
             <td>R$ ${v.purchasePrice.toFixed(2)}</td>
             <td>R$ ${v.salePrice.toFixed(2)}</td>
             <td>R$ ${v.profit.toFixed(2)}</td>
+            <td>${v.transactionDate}</td>
         `;
         tableBody.appendChild(row);
     });
@@ -90,6 +93,7 @@ document.getElementById('searchBar').addEventListener('input', function(event) {
             <td>R$ ${v.purchasePrice.toFixed(2)}</td>
             <td>R$ ${v.salePrice.toFixed(2)}</td>
             <td>R$ ${v.profit.toFixed(2)}</td>
+            <td>${v.transactionDate}</td>
         `;
         tableBody.appendChild(row);
     });
