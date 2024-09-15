@@ -1,19 +1,52 @@
+// Inicializar variáveis
 let vehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
 let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 let totalProfit = parseFloat(localStorage.getItem('totalProfit')) || 0;
 let totalExpenses = parseFloat(localStorage.getItem('totalExpenses')) || 0;
+
+// Função para formatar o campo de input como moeda
+function formatInputCurrency(input) {
+    let value = input.value;
+    // Remover todos os caracteres que não são números
+    value = value.replace(/\D/g, '');
+    value = (value / 100).toFixed(2); // Adicionar os centavos
+    input.value = value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+// Adicionar eventos de formatação de moeda para os inputs de preço
+document.getElementById('purchasePrice').addEventListener('input', function() {
+    formatInputCurrency(this);
+});
+
+document.getElementById('salePrice').addEventListener('input', function() {
+    formatInputCurrency(this);
+});
+
+document.getElementById('expenseAmount').addEventListener('input', function() {
+    formatInputCurrency(this);
+});
+
+// Função para formatar valores monetários
+function formatCurrency(value) {
+    return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    }).format(value);
+}
 
 // Função para adicionar veículo
 document.getElementById('vehicleForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
     const vehicle = document.getElementById('vehicle').value;
-    const purchasePrice = parseFloat(document.getElementById('purchasePrice').value);
-    const salePrice = parseFloat(document.getElementById('salePrice').value);
+    const year = document.getElementById('year').value; // Capturar o ano
+    const color = document.getElementById('color').value; // Capturar a cor
+    const purchasePrice = parseFloat(document.getElementById('purchasePrice').value.replace(/\D/g, '')) / 100;
+    const salePrice = parseFloat(document.getElementById('salePrice').value.replace(/\D/g, '')) / 100;
     const transactionDate = document.getElementById('transactionDate').value;
     const profit = salePrice - purchasePrice;
 
-    const newVehicle = { vehicle, purchasePrice, salePrice, profit, transactionDate };
+    const newVehicle = { vehicle, year, color, purchasePrice, salePrice, profit, transactionDate };
     vehicles.push(newVehicle);
     localStorage.setItem('vehicles', JSON.stringify(vehicles));
 
@@ -29,7 +62,7 @@ document.getElementById('expenseForm').addEventListener('submit', function(event
     event.preventDefault();
 
     const expenseType = document.getElementById('expenseType').value;
-    const expenseAmount = parseFloat(document.getElementById('expenseAmount').value);
+    const expenseAmount = parseFloat(document.getElementById('expenseAmount').value.replace(/\D/g, '')) / 100;
     const expenseDate = document.getElementById('expenseDate').value;
 
     const newExpense = { expenseType, expenseAmount, expenseDate };
@@ -43,7 +76,7 @@ document.getElementById('expenseForm').addEventListener('submit', function(event
     document.getElementById('expenseForm').reset();
 });
 
-// Função para renderizar tabela de veículos e despesas
+// Função para renderizar a tabela de veículos e despesas
 function renderTable() {
     const tableBody = document.getElementById('vehicleTableBody');
     tableBody.innerHTML = '';
@@ -51,16 +84,18 @@ function renderTable() {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${v.vehicle}</td>
-            <td>R$ ${v.purchasePrice.toFixed(2)}</td>
-            <td>R$ ${v.salePrice.toFixed(2)}</td>
-            <td>R$ ${v.profit.toFixed(2)}</td>
+            <td>${v.year}</td>
+            <td>${v.color}</td>
+            <td>${formatCurrency(v.purchasePrice)}</td>
+            <td>${formatCurrency(v.salePrice)}</td>
+            <td>${formatCurrency(v.profit)}</td>
             <td>${v.transactionDate}</td>
         `;
         tableBody.appendChild(row);
     });
 
-    document.getElementById('totalProfit').innerText = `R$ ${totalProfit.toFixed(2)}`;
-    document.getElementById('totalExpenses').innerText = `R$ ${totalExpenses.toFixed(2)}`;
+    document.getElementById('totalProfit').innerText = formatCurrency(totalProfit);
+    document.getElementById('totalExpenses').innerText = formatCurrency(totalExpenses);
 }
 
 // Função para gerar relatórios detalhados
@@ -75,22 +110,22 @@ function generateReport(type) {
     }
 
     // Relatório de Veículos
-    report += `<h4>Relatório de Veículos</h4><table><tr><th>Veículo</th><th>Compra</th><th>Venda</th><th>Lucro</th><th>Data</th></tr>`;
+    report += `<h4>Relatório de Veículos</h4><table><tr><th>Veículo</th><th>Ano</th><th>Cor</th><th>Compra</th><th>Venda</th><th>Lucro</th><th>Data</th></tr>`;
     vehicles.forEach((v) => {
-        report += `<tr><td>${v.vehicle}</td><td>R$ ${v.purchasePrice.toFixed(2)}</td><td>R$ ${v.salePrice.toFixed(2)}</td><td>R$ ${v.profit.toFixed(2)}</td><td>${v.transactionDate}</td></tr>`;
+        report += `<tr><td>${v.vehicle}</td><td>${v.year}</td><td>${v.color}</td><td>${formatCurrency(v.purchasePrice)}</td><td>${formatCurrency(v.salePrice)}</td><td>${formatCurrency(v.profit)}</td><td>${v.transactionDate}</td></tr>`;
     });
     report += `</table>`;
 
     // Relatório de Despesas
     report += `<h4>Relatório de Despesas</h4><table><tr><th>Tipo</th><th>Valor</th><th>Data</th></tr>`;
     expenses.forEach((e) => {
-        report += `<tr><td>${e.expenseType}</td><td>R$ ${e.expenseAmount.toFixed(2)}</td><td>${e.expenseDate}</td></tr>`;
+        report += `<tr><td>${e.expenseType}</td><td>${formatCurrency(e.expenseAmount)}</td><td>${e.expenseDate}</td></tr>`;
     });
     report += `</table>`;
 
     // Totalizadores
-    report += `<h4>Total de Lucro: R$ ${totalProfit.toFixed(2)}</h4>`;
-    report += `<h4>Total de Despesas: R$ ${totalExpenses.toFixed(2)}</h4>`;
+    report += `<h4>Total de Lucro: ${formatCurrency(totalProfit)}</h4>`;
+    report += `<h4>Total de Despesas: ${formatCurrency(totalExpenses)}</h4>`;
 
     reportSection.innerHTML = report;
 }
@@ -108,14 +143,16 @@ document.getElementById('searchBar').addEventListener('input', function(event) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${v.vehicle}</td>
-            <td>R$ ${v.purchasePrice.toFixed(2)}</td>
-            <td>R$ ${v.salePrice.toFixed(2)}</td>
-            <td>R$ ${v.profit.toFixed(2)}</td>
+            <td>${v.year}</td>
+            <td>${v.color}</td>
+            <td>${formatCurrency(v.purchasePrice)}</td>
+            <td>${formatCurrency(v.salePrice)}</td>
+            <td>${formatCurrency(v.profit)}</td>
             <td>${v.transactionDate}</td>
         `;
         tableBody.appendChild(row);
     });
 });
 
-// Inicializar tabelas
+// Inicializar tabelas ao carregar a página
 renderTable();

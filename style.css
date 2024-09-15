@@ -1,78 +1,126 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f9;
 }
 
 .container {
-    width: 80%;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: white;
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-    text-align: center;
+h1, h2, h3, h4 {
     color: #333;
 }
 
 form {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 form div {
-    margin-bottom: 10px;
+    flex: 1 1 100%;
 }
 
-label {
+form label {
     font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
 }
 
-input {
-    padding: 8px;
-    width: calc(100% - 16px);
-    margin-top: 4px;
+form input, form select {
+    width: 100%;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 16px;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #f3831c;
+form button {
+    padding: 10px 15px;
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-size: 16px;
 }
 
-button:hover {
-    background-color: #b75b05;
+form button:hover {
+    background-color: #218838;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
-table, th, td {
-    border: 1px solid #ddd;
-}
-
-th, td {
-    padding: 10px;
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 12px;
     text-align: left;
 }
 
-th {
-    background-color: #f2f2f2;
+table th {
+    background-color: #f8f9fa;
 }
 
-h3 {
-    text-align: right;
-    color: #333;
+@media (min-width: 600px) {
+    form div {
+        flex: 1 1 45%;
+    }
+
+    form button {
+        flex: 1 1 100%;
+    }
 }
+
+@media (min-width: 768px) {
+    table th, table td {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 599px) {
+    table, table thead, table tbody, table th, table td, table tr {
+        display: block;
+    }
+
+    table tr {
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+    }
+
+    table td {
+        padding-left: 50%;
+        position: relative;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 15px;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+}
+
